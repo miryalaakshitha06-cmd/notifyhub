@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NotifyHub — Campus Announcement & Event Notification Platform
 
-## Getting Started
+**Connect. Inform. Engage.**
 
-First, run the development server:
+NotifyHub is a modern full-stack web application designed for educational institutions to manage campus announcements, upcoming events, notifications, and student query tickets.
 
+---
+
+## 📸 Overview & Features
+
+### Student Portal (Public — No Login Required)
+- **Campus Announcements**: Browse notices with real-time search and multi-filtering (Category, Priority, Department, Year).
+- **Urgent Notice Banner**: Prominent visual highlight for critical alerts (e.g. End Semester Exam timetable releases).
+- **Campus Events & Calendar**: View upcoming hackathons, workshops, and sports meets with interactive monthly calendar.
+- **Student Query Desk**: Submit queries with roll number/student ID, category, description, and track official administration responses.
+- **Notification Hub**: Real-time notification feed with unread counter and polling.
+
+### Administration Portal (Role-Based Access Control)
+- **3 Role Logins**: Visual role selection for **Admin**, **HOD**, and **Faculty**.
+- **Admin Dashboard**: Overview cards, activity logs, quick action shortcuts.
+- **Announcement Management**: Full CRUD (Create, Edit, Delete, Save Draft, Publish, Archive, Priority, Department/Year target, Attachments).
+- **Event Management**: Create and manage events, set registration deadlines, venues, organizers.
+- **Query Ticket Inbox**: Review student inquiries, reply with official answers, and mark status (`OPEN`, `IN_PROGRESS`, `RESOLVED`).
+- **Activity Audit Trail**: Automatic audit logging for staff actions across the platform.
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: React 19, Vite, React Router DOM v7, Lucide Icons, Vanilla CSS with CSS Variables.
+- **Backend**: Node.js, Express.js, JWT in HTTP-Only Cookies, bcryptjs, Multer, Cookie Parser, CORS.
+- **Database & ORM**: PostgreSQL / SQLite, Prisma ORM.
+
+---
+
+## 🔑 Demo Credentials
+
+- **Admin**: `admin@notifyhub.com` / `admin123`
+- **HOD**: `hod@notifyhub.com` / `hod123`
+- **Faculty**: `faculty@notifyhub.com` / `faculty123`
+
+---
+
+## 🚀 Getting Started
+
+### 1. Backend Setup (`server/`)
 ```bash
+cd server
+npm install
+npm run db:push
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Frontend Setup (Root)
+```bash
+npm install
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Visit [`http://localhost:5173`](http://localhost:5173) in your browser.

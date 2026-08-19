@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+enum UserRole {
+  ADMIN
+  HOD
+  FACULTY
+}
+
+enum AnnouncementCategory {
+  ACADEMIC
+  EXAM
+  PLACEMENT
+  WORKSHOP
+  EVENT
+  GENERAL
+}
+
+enum AnnouncementPriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QueryStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  passwordHash  String
+  role          UserRole       @default(FACULTY)
+  rollNo        String?
+  year          String?
+  department    String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  announcements Announcement[]
+  events        Event[]
+  assignedQueries Query[]      @relation("AssignedQueries")
+  notifications Notification[]
+  activityLogs  ActivityLog[]
+}
+
+model Announcement {
+  id               String               @id @default(uuid())
+  title            String
+  description      String
+  category         AnnouncementCategory @default(GENERAL)
+  priority         AnnouncementPriority @default(NORMAL)
+  status           AnnouncementStatus   @default(PUBLISHED)
+  targetDepartment String?              @default("ALL")
+  targetYear       String?              @default("ALL")
+  publishedAt      DateTime             @default(now())
+  attachmentName   String?
+  attachmentType   String?
+  attachmentData   String?              // Base64 encoded file data
+  createdById      String
+  createdBy        User                 @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+}
+
+model Event {
+  id                   String   @id @default(uuid())
+  title                String
+  description          String
+  startDate            DateTime
+  endDate              DateTime
+  venue                String
+  organizer            String
+  registrationDeadline DateTime?
+  registrationStatus   String   @default("OPEN") // OPEN, CLOSED, UPCOMING
+  targetDepartment     String?  @default("ALL")
+  targetYear           String?  @default("ALL")
+  attachmentName       String?
+  attachmentType       String?
+  attachmentData       String?  // Base64 encoded file data
+  createdById          String
+  createdBy            User     @relation(fields: [createdById], references: [id], onDelete: Cascade)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Query {
+  id           String      @id @default(uuid())
+  subject      String
+  description  String
+  category     String      @default("GENERAL")
+  status       QueryStatus @default(OPEN)
+  studentName  String?     @default("Anonymous Student")
+  studentEmail String?
+  studentId    String?     // Roll No or Student ID
+  assignedToId String?
+  assignedTo   User?       @relation("AssignedQueries", fields: [assignedToId], references: [id])
+  response     String?
+  resolvedAt   DateTime?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+  userId     String?  // null means public / all students notification
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  message    String
+  type       String   @default("INFO") // URGENT, ANNOUNCEMENT, EVENT, QUERY_RESPONSE
+  isRead     Boolean  @default(false)
+  relatedId  String?
+  createdAt  DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  createdAt DateTime @default(now())
+}
